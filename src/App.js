@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { Component } from "react";
 import "./App.css";
+import Alert from "./components/layouts/Alert";
 import NavBar from "./components/layouts/navBar";
 import Search from "./components/users/Search";
 import Users from "./components/users/Users";
@@ -8,7 +9,7 @@ import Users from "./components/users/Users";
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { users: [], loading: false };
+    this.state = { users: [], loading: false, alert: null };
   }
   // async componentDidMount() {
   //   this.setState({ loading: true });
@@ -28,6 +29,11 @@ class App extends Component {
   clearUesrs = () => {
     this.setState({ users: [], loading: false });
   };
+  // setAlert
+  setAlert = (msg, type) => {
+    this.setState({ alert: { msg, type } });
+    setTimeout(() => this.setState({ alert: null }), 4000);
+  };
 
   render() {
     const { users, loading } = this.state;
@@ -35,10 +41,12 @@ class App extends Component {
       <div className="App">
         <NavBar title="githubFinder" />
         <div className="container">
+          <Alert alert={this.state.alert} />
           <Search
             searchUsers={this.searchUsers}
             clearUesrs={this.clearUesrs}
             showClear={users.length > 0 ? true : false}
+            setAlert={this.setAlert}
           />
           <Users users={users} loading={loading} />
         </div>
